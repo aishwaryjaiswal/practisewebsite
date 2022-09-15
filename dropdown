@@ -1,0 +1,91 @@
+package introduction;
+//ctrl+shift+F to align the code
+
+//class name be like"Classname"
+//variable name be like "variableName"
+
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+
+
+public class a7dropdown {
+
+	public static void main(String[] args) throws InterruptedException {
+		// TODO Auto-generated method stub
+		System.setProperty("webdriver.chrome.driver",
+				"C:\\Users\\Aishwary.Jaiswal\\Downloads\\chromedriver_win32 (1)\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
+//dropdown with select tagname only - static- here options are fixed, it does not come based upon inpput
+		driver.get("https://rahulshettyacademy.com/dropdownsPractise/");
+		driver.manage().window().maximize();
+
+		WebElement staticDropdown = driver.findElement(By.xpath("//select[@id='ctl00_mainContent_DropDownListCurrency']"));
+
+		Select dropdown = new Select(staticDropdown);
+		dropdown.selectByIndex(2);
+		System.out.println(dropdown.getFirstSelectedOption().getText());
+		dropdown.selectByVisibleText("AED");
+		System.out.println(dropdown.getFirstSelectedOption().getText());
+		dropdown.selectByValue("USD");
+		System.out.println(dropdown.getFirstSelectedOption().getText());
+//dropdowntype2-passengers
+		driver.findElement(By.id("divpaxinfo")).click();
+		Thread.sleep(2000);
+		int i = 1;
+		while (i < 5) {
+			driver.findElement(By.id("hrefIncAdt")).click();
+			i++;
+		}
+
+		driver.findElement(By.id("btnclosepaxoption")).click();
+		System.out.println(driver.findElement(By.id("divpaxinfo")).getText());
+		// driver.close();
+//dynamic dropdown type-3
+		driver.findElement(By.id("ctl00_mainContent_ddl_originStation1_CTXTaction")).click();
+		driver.findElement(By.xpath("//a[@value='ATQ']")).click();
+		Thread.sleep(2000);
+
+		driver.findElement(By.xpath("(//a[@value='VNS'])[2]")).click();
+//dynamic dropdown type-3-another way (not using indexes)-using parent to child
+//driver.findElement(By.xpath("//div[@id='glsctl00_mainContent_ddl_destinationStation1_CTNR'] //a[@value='MAA']")).click();
+
+//auto suggestive dropdowns - country-here options comes based upon input
+		// IMPORTANT
+		driver.findElement(By.id("autosuggest")).sendKeys("ind");
+		Thread.sleep(2000);
+		List<WebElement> options = driver.findElements(By.cssSelector("li[class='ui-menu-item'] a"));
+
+		for (WebElement option : options)
+
+		{
+			if (option.getText().equalsIgnoreCase("India"))
+			{
+				option.click();
+// handling calender now
+
+				Thread.sleep(2000);
+
+				driver.findElement(By.cssSelector("button[class='ui-datepicker-trigger']")).click();
+				/*
+				 * input[type*='pass']--general exp we use star so that it matches with any id
+				 * that has those words, we do not write the full value in this, some part of
+				 * the value may also work driver.findElement(By.cssSelector(null))
+				 */
+				Thread.sleep(2000);
+				// if date is today
+				// if date is some other day--visit further lectures
+				driver.findElement(By.cssSelector("td[class*='ui-datepicker-today']")).click();
+				driver.findElement(By.xpath("//input[@id='ctl00_mainContent_chk_IndArm']")).click();
+			}
+
+		}
+driver.findElement(By.xpath("//input[@id='ctl00_mainContent_btn_FindFlights']")).click();
+driver.quit();
+	}
+
+}
